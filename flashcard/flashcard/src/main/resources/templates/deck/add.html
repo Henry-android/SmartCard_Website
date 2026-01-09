@@ -1,0 +1,105 @@
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tạo bộ thẻ mới - Flashcard App</title>
+    <link th:href="@{/css/deck.css}" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+    <div layout:fragment="content" class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="create-card p-5">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-plus-circle fa-3x text-primary mb-3"></i>
+                        <h2 class="fw-bold">Tạo bộ thẻ mới</h2>
+                        <p class="text-muted">Tạo bộ thẻ flashcard để bắt đầu học tập</p>
+                    </div>
+
+                    <form th:action="@{/decks/create}" method="post">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Tên bộ thẻ <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="title" name="title"
+                                placeholder="Nhập tên bộ thẻ" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Mô tả</label>
+                            <textarea class="form-control" id="description" name="description" rows="3"
+                                placeholder="Mô tả về bộ thẻ (tùy chọn)"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="subject" class="form-label">Môn học</label>
+                            <select class="form-select" id="subject" name="subject">
+                                <option value="">Chọn môn học</option>
+                                <option value="Toán học">Toán học</option>
+                                <option value="Vật lý">Vật lý</option>
+                                <option value="Hóa học">Hóa học</option>
+                                <option value="Sinh học">Sinh học</option>
+                                <option value="Lịch sử">Lịch sử</option>
+                                <option value="Địa lý">Địa lý</option>
+                                <option value="Văn học">Văn học</option>
+                                <option value="Tiếng Anh">Tiếng Anh</option>
+                                <option value="Tiếng Việt">Tiếng Việt</option>
+                                <option value="Công nghệ">Công nghệ</option>
+                                <option value="Khác">Khác</option>
+                            </select>
+                        </div>
+
+                        <!-- Ô nhập môn học nếu chọn "Khác" -->
+                        <div class="mb-3" id="customSubjectWrapper" style="display: none;">
+                            <label for="customSubject" class="form-label">Nhập tên môn học</label>
+                            <input type="text" class="form-control" id="customSubject" name="customSubject"
+                                placeholder="Nhập tên môn học...">
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="form-check">
+                                <!-- Hidden input đảm bảo luôn gửi isPublic=false nếu checkbox không được tick -->
+                                <input type="hidden" name="isPublic" value="false" />
+
+                                <!-- Nếu checkbox được tick thì sẽ ghi đè thành isPublic=true -->
+                                <input class="form-check-input" type="checkbox" id="isPublic" name="isPublic"
+                                    value="true">
+                                <label class="form-check-label" for="isPublic">
+                                    Công khai bộ thẻ này
+                                </label>
+                            </div>
+                            <small class="text-muted">Bộ thẻ công khai sẽ được hiển thị cho tất cả người dùng</small>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-save me-2"></i>Tạo bộ thẻ
+                            </button>
+                            <a href="/decks" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Quay lại
+                            </a>
+                        </div>
+                    </form>
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                <script>
+                document.querySelector('form').addEventListener('submit', function(e) {
+                    var title = document.getElementById('title').value.trim();
+                    if (title.length > 30) {
+                        e.preventDefault();
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Tên bộ thẻ quá dài',
+                            text: 'Tên bộ thẻ chỉ được tối đa 30 ký tự!'
+                        });
+                        return false;
+                    }
+                });
+                </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/layout}">
+
+<head>
+    <title>Câu hỏi quiz theo Deck</title>
+    <link th:href="@{/css/quiz_question.css}" rel="stylesheet">
+</head>
+
+<div layout:fragment="content" class="container mt-5">
+    <!-- Tiêu đề -->
+    <h2 class="mb-4 text-primary d-flex align-items-center">
+        <i class="fas fa-layer-group me-2"></i> Câu hỏi trong Deck:
+        <span class="ms-2 fw-bold" th:text="${deck.title}"></span>
+    </h2>
+
+    <!-- Nút quay lại -->
+    <div class="mb-4">
+        <a th:href="@{/decks/{id}(id=${deck.id})}" class="btn btn-outline-secondary rounded-pill">
+            <i class="fas fa-arrow-left me-1"></i> Quay lại danh sách Deck
+        </a>
+    </div>
+
+    <!-- Danh sách câu hỏi -->
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        <div class="col" th:each="qq : ${quizQuestions}">
+            <div class="card h-100 shadow rounded-4 p-3 border-0 position-relative">
+                <div class="card-body">
+                    <h6 class="text-muted mb-2">
+                        <i class="fas fa-book me-2 text-secondary"></i>
+                        <strong>Thuật ngữ:</strong>
+                        <span class="text-dark" th:text="${qq.flashcard.term}"></span>
+                    </h6>
+
+                    <p class="mb-2">
+                        <i class="fas fa-lightbulb me-2 text-warning"></i>
+                        <strong>Định nghĩa:</strong>
+                        <span th:text="${qq.flashcard.definition}"></span>
+                    </p>
+
+                    <p class="mb-2">
+                        <i class="fas fa-question-circle me-2 text-info"></i>
+                        <strong>Câu hỏi:</strong>
+                        <span th:text="${qq.questionText}"></span>
+                    </p>
+
+                    <p>
+                        <i class="fas fa-check-circle me-2 text-success"></i>
+                        <strong>Đáp án đúng:</strong>
+                        <span class="fw-semibold text-success" th:text="${qq.correctAnswer}"></span>
+                    </p>
+                </div>
+
+                <!-- Các nút chức năng -->
+                <div class="card-footer bg-transparent border-0 d-flex justify-content-end gap-2">
+                    <a class="btn btn-sm btn-outline-primary rounded-pill"
+                        th:href="@{/quiz-questions/edit/{id}(id=${qq.id})}">
+                        <i class="fas fa-edit me-1"></i> Sửa
+                    </a>
+
+                    <form th:action="@{/quiz-questions/delete/{id}(id=${qq.id})}" method="post"
+                        onsubmit="return confirm('Bạn có chắc muốn xóa câu hỏi này?');">
+                        <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill">
+                            <i class="fas fa-trash-alt me-1"></i> Xoá
+                        </button>
+                    </form>
+
+                    <a class="btn btn-sm btn-outline-success rounded-pill"
+                        th:href="@{/quiz-questions/add/flashcard/{id}(id=${qq.flashcard.id})}">
+                        <i class="fas fa-plus-circle me-1"></i> Thêm mới
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</html>

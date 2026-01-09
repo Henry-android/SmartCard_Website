@@ -1,0 +1,52 @@
+<!-- Flashcard -->
+<div th:fragment="flashcardItem(card)">
+    <div class="flashcard shadow-lg rounded-4 position-relative" onmouseenter="this.classList.add('hovered')"
+        onmouseleave="this.classList.remove('hovered')" onclick="this.classList.toggle('flipped')">
+
+        <div class="flashcard-inner position-relative">
+
+            <!-- Thanh toolbar trượt -->
+            <div class="flashcard-toolbar position-absolute top-0 end-0 pt-2 px-2 invisible"
+                th:if="${@perm.isOwnerOrAdmin(session.loggedInUser, card.deck)}" onclick="event.stopPropagation();">
+
+                <div class="btn-group-vertical w-100 align-items-stretch" style="gap: 5px;">
+
+                    <!-- Nút thêm câu hỏi -->
+                    <a class="btn btn-outline-success d-flex justify-content-center align-items-center gap-2 btn-sm w-100 text-center"
+                        th:href="@{/quiz-questions/add/flashcard/{id}(id=${card.id})}">
+                        <i class="fas fa-plus-circle"></i> Thêm câu hỏi
+                    </a>
+
+                    <!-- Nút sửa -->
+                    <a class="btn btn-outline-primary d-flex justify-content-center align-items-center gap-2 btn-sm w-100 text-center"
+                        th:href="@{'/flashcards/edit/' + ${card.id}}" onclick="event.stopPropagation();">
+                        <i class="fas fa-edit"></i> Cập nhật
+                    </a>
+
+                    <!-- Nút xoá -->
+                    <form th:action="@{'/flashcards/delete/' + ${card.id}}" method="post"
+                        onsubmit="event.stopPropagation(); return confirm('Bạn có chắc muốn xóa thẻ này?');">
+                        <button type="submit"
+                            class="btn btn-outline-danger d-flex justify-content-center align-items-center gap-2 btn-sm w-100 text-center">
+                            <i class="fas fa-trash-alt"></i> Xoá
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Mặt trước -->
+            <div class="flashcard-front p-4 bg-light rounded-4">
+                <div th:if="${card.imageUrl != null}" class="mb-3 text-center">
+                    <img th:src="@{${card.imageUrl}}" alt="Flashcard Image" class="img-fluid rounded"
+                        style="max-height: 200px;" />
+                </div>
+                <h5 class="fw-bold text-center" th:text="${card.term}">Thuật ngữ</h5>
+            </div>
+
+            <!-- Mặt sau -->
+            <div class="flashcard-back text-light p-4 bg-primary rounded-4">
+                <p class="text-center" th:text="${card.definition}">Định nghĩa</p>
+            </div>
+        </div>
+    </div>
+</div>
